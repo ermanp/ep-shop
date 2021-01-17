@@ -1,10 +1,12 @@
 package com.ermanp.shoppingapp.product.service;
 
 import com.ermanp.shoppingapp.product.domain.Product;
+import com.ermanp.shoppingapp.product.domain.category.Category;
 import com.ermanp.shoppingapp.product.domain.es.CategoryEs;
 import com.ermanp.shoppingapp.product.domain.es.CompanyEs;
 import com.ermanp.shoppingapp.product.domain.es.ProductEs;
 import com.ermanp.shoppingapp.product.repository.es.ProductEsRepository;
+import com.ermanp.shoppingapp.product.service.category.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class ProductEsService {
 
     private final ProductEsRepository productEsRepository;
+    private final CategoryService categoryService;
 
     public Mono<ProductEs> saveNewProduct(Product product){
         return productEsRepository.save(
@@ -29,10 +32,19 @@ public class ProductEsService {
                 .id(product.getId())
                 .name(product.getName())
                 //TODO get company name and code
-                .seller(CompanyEs.builder().id(product.getCompanyId()).name("").build())
+                .seller(CompanyEs.builder().id(product.getCompanyId()).name("Test").build())
                 // TODO get company name and code
-                .category(CategoryEs.builder().id(product.getCategoryId()).name("Test").build())
+                .category(getProductCategory(product.getCategoryId()))
                 .build());
+    }
+
+    private CategoryEs getProductCategory(String categoryId) {
+        Category category =  categoryService.getById(categoryId);
+        return CategoryEs.builder()
+                .name(category.getName())
+                .id(category.getId())
+                .code(category.getCode())
+                .build();
     }
 
     public Flux<ProductEs> findAll() {

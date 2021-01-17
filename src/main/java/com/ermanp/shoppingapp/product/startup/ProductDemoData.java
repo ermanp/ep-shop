@@ -1,11 +1,13 @@
 package com.ermanp.shoppingapp.product.startup;
 
 import com.ermanp.shoppingapp.product.domain.MoneyTypes;
-import com.ermanp.shoppingapp.product.model.ProductSaveRequest;
+import com.ermanp.shoppingapp.product.model.category.CategoryResponse;
+import com.ermanp.shoppingapp.product.model.category.CategorySaveRequest;
+import com.ermanp.shoppingapp.product.model.product.ProductSaveRequest;
 import com.ermanp.shoppingapp.product.service.ProductService;
+import com.ermanp.shoppingapp.product.service.category.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -18,11 +20,16 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class ProductDemoData {
     private final ProductService productService;
+    private final CategoryService categoryService;
 
     @EventListener(ApplicationReadyEvent.class)
     public void migrate(){
         Long countOfData = productService.count().block();
-       // if(countOfData.equals(0)) {
+        if(countOfData.equals(0L)) {
+            CategoryResponse elektronik = categoryService.save(CategorySaveRequest.builder().name("Elektronik").build());
+            CategoryResponse telefon = categoryService.save(CategorySaveRequest.builder().name("Cep Telefonu").build());
+
+
             IntStream.range(0, 20).forEach(item -> {
                 productService.save(
                         ProductSaveRequest.builder()
@@ -38,6 +45,6 @@ public class ProductDemoData {
                                 .build());
 
             });
-     //   }
+        }
     }
 }

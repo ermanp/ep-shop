@@ -1,6 +1,7 @@
-package com.ermanp.shoppingapp.product.model;
+package com.ermanp.shoppingapp.product.model.product;
 
 import com.ermanp.shoppingapp.product.domain.MoneyTypes;
+import com.ermanp.shoppingapp.product.model.ProductSellerResponse;
 import lombok.Builder;
 import lombok.Data;
 

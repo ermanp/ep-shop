@@ -1,7 +1,8 @@
 package com.ermanp.shoppingapp.product.api;
 
-import com.ermanp.shoppingapp.product.model.product.ProductResponse;
-import com.ermanp.shoppingapp.product.service.ProductService;
+import com.ermanp.shoppingapp.product.domain.category.Category;
+import com.ermanp.shoppingapp.product.model.category.CategoryResponse;
+import com.ermanp.shoppingapp.product.service.category.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,16 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/category")
 @RequiredArgsConstructor
 @CrossOrigin("*")
-public class ProductApi {
-    private final ProductService productService;
+public class CategoryApi {
 
-    @GetMapping
-    public Flux<ProductResponse> getAllProducts() {
-        return productService.getAll();
+    private final CategoryService categoryService;
+
+    @GetMapping()
+    public Flux<CategoryResponse> getAll(){
+        return categoryService.getAll();
     }
-
-
 }
